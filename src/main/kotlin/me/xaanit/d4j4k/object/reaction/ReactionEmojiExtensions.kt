@@ -1,10 +1,9 @@
-package me.xaanit.d4j4k.object.reaction
+package me.xaanit.d4j4k.`object`.reaction
 
 
-import kotlinx.coroutines.reactive.awaitSingle
-import discord4j.core.object.reaction.ReactionEmoji
+import discord4j.core.`object`.reaction.ReactionEmoji
 
 
-fun ReactionEmoji.asCustomEmoji(): Custom? = asCustomEmoji.orElse(null)
-fun ReactionEmoji.asUnicodeEmoji(): Unicode? = asUnicodeEmoji.orElse(null)
+fun ReactionEmoji.custom(): ReactionEmoji.Custom? = asCustomEmoji().orElse(null)
+fun ReactionEmoji.unicode(): ReactionEmoji.Unicode? = asUnicodeEmoji().orElse(null)
                 

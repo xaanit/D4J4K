@@ -1,12 +1,9 @@
-package me.xaanit.d4j4k.object.entity
+package me.xaanit.d4j4k.`object`.entity
 
-import discord4j.common.json.UserResponse;
-import discord4j.core.`object`.data.stored.UserBean;
-import discord4j.core.`object`.util.Snowflake;
-import java.time.Instant;
-
+import discord4j.core.`object`.entity.*
+import discord4j.core.`object`.util.Snowflake
 import kotlinx.coroutines.reactive.awaitSingle
-import discord4j.core.object.entity.Message
+import java.time.Instant
 
 
 suspend fun Message.channel(): MessageChannel = channel.awaitSingle()
@@ -19,8 +16,8 @@ suspend fun Message.userMentions(): List<User> = userMentions.collectList().awai
 suspend fun Message.roleMentions(): List<Role> = roleMentions.collectList().awaitSingle()
 suspend fun Message.webhook(): Webhook = webhook.awaitSingle()
 suspend fun Message.guild(): Guild = guild.awaitSingle()
-suspend fun Message.delete(): Unit = delete.awaitSingle().let{}
-suspend fun Message.removeAllReactions(): Unit = removeAllReactions.awaitSingle().let{}
-suspend fun Message.pin(): Unit = pin.awaitSingle().let{}
-suspend fun Message.unpin(): Unit = unpin.awaitSingle().let{}
+suspend fun Message.eradicate(): Unit = delete().awaitSingle().let {}
+suspend fun Message.deleteAllReactions(): Unit = removeAllReactions().awaitSingle().let {}
+suspend fun Message.pinMessage(): Unit = pin().awaitSingle().let {}
+suspend fun Message.unpinMessage(): Unit = unpin().awaitSingle().let {}
                 

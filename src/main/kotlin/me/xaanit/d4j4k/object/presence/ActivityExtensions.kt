@@ -1,10 +1,8 @@
-package me.xaanit.d4j4k.object.presence
+package me.xaanit.d4j4k.`object`.presence
 
-import discord4j.core.`object`.util.Snowflake;
-import java.time.Instant;
-
-import kotlinx.coroutines.reactive.awaitSingle
-import discord4j.core.object.presence.Activity
+import discord4j.core.`object`.presence.Activity
+import discord4j.core.`object`.util.Snowflake
+import java.time.Instant
 
 
 fun Activity.streamingUrl(): String? = streamingUrl.orElse(null)

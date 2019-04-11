@@ -1,13 +1,11 @@
-package me.xaanit.d4j4k.object.entity
+package me.xaanit.d4j4k.`object`.entity
 
-import discord4j.core.`object`.ExtendedInvite;
-import discord4j.core.`object`.VoiceState;
-import discord4j.core.`object`.data.ExtendedInviteBean;
-import discord4j.core.`object`.data.stored.VoiceStateBean;
-import discord4j.core.`object`.util.Snowflake;
-
+import discord4j.core.`object`.ExtendedInvite
+import discord4j.core.`object`.VoiceState
+import discord4j.core.`object`.entity.Category
+import discord4j.core.`object`.entity.VoiceChannel
+import discord4j.core.`object`.util.Snowflake
 import kotlinx.coroutines.reactive.awaitSingle
-import discord4j.core.object.entity.VoiceChannel
 
 
 fun VoiceChannel.categoryId(): Snowflake? = categoryId.orElse(null)

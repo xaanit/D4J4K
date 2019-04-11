@@ -1,9 +1,7 @@
-package me.xaanit.d4j4k.object
+package me.xaanit.d4j4k.`object`
 
-import discord4j.core.`object`.util.Snowflake;
-
-import kotlinx.coroutines.reactive.awaitSingle
-import discord4j.core.object.PermissionOverwrite
+import discord4j.core.`object`.PermissionOverwrite
+import discord4j.core.`object`.util.Snowflake
 
 
 fun PermissionOverwrite.roleId(): Snowflake? = roleId.orElse(null)
