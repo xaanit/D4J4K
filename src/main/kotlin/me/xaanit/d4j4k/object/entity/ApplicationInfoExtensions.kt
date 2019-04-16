@@ -1,11 +1,29 @@
 package me.xaanit.d4j4k.`object`.entity
 
-
 import discord4j.core.`object`.entity.ApplicationInfo
 import discord4j.core.`object`.entity.User
-import kotlinx.coroutines.reactive.awaitSingle
+import discord4j.core.`object`.util.Image
+import me.xaanit.d4j4k.await
+import me.xaanit.d4j4k.grab
 
+/**
+ * Gets the icon for the application.
+ *
+ * @param format The format the icon is returned in. Must be PNG, JPG, or WEBP
+ * @return The nullable icon for the application.
+ */
+fun ApplicationInfo.icon(format: Image.Format): String? = getIcon(format).grab()
 
-fun ApplicationInfo.description(): String? = description.orElse(null)
-suspend fun ApplicationInfo.owner(): User = owner.awaitSingle()
-                
+/**
+ * Gets the description for the application.
+ *
+ */
+fun ApplicationInfo.description(): String? = description.grab()
+
+/**
+ * Requests the owner of the application.
+ *
+ * @return A suspended call to the [reactor.core.publisher.Mono] that, upon successful completion,
+ * returns the [User] that represents the owner. If an error is received it's thrown.
+ */
+suspend fun ApplicationInfo.owner(): User = owner.await()

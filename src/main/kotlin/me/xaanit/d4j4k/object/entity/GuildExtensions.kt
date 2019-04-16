@@ -7,36 +7,62 @@ import discord4j.core.`object`.VoiceState
 import discord4j.core.`object`.audit.AuditLogEntry
 import discord4j.core.`object`.entity.*
 import discord4j.core.`object`.presence.Presence
+import discord4j.core.`object`.util.Image
 import discord4j.core.`object`.util.Snowflake
-import kotlinx.coroutines.reactive.awaitSingle
+import discord4j.core.spec.*
+import me.xaanit.d4j4k.await
+import me.xaanit.d4j4k.awaitNull
+import me.xaanit.d4j4k.grab
+import me.xaanit.d4j4k.unit
 import java.time.Instant
 
+// TODO: DOCS
 
-suspend fun Guild.owner(): Member = owner.awaitSingle()
-suspend fun Guild.region(): Region = region.awaitSingle()
-suspend fun Guild.regions(): List<Region> = regions.collectList().awaitSingle()
-fun Guild.afkChannelId(): Snowflake? = afkChannelId.orElse(null)
-suspend fun Guild.afkChannel(): VoiceChannel = afkChannel.awaitSingle()
-fun Guild.embedChannelId(): Snowflake? = embedChannelId.orElse(null)
-suspend fun Guild.embedChannel(): GuildChannel = embedChannel.awaitSingle()
-suspend fun Guild.roles(): List<Role> = roles.collectList().awaitSingle()
-suspend fun Guild.everyoneRole(): Role = everyoneRole.awaitSingle()
-suspend fun Guild.emojis(): List<GuildEmoji> = emojis.collectList().awaitSingle()
-fun Guild.applicationId(): Snowflake? = applicationId.orElse(null)
-fun Guild.widgetChannelId(): Snowflake? = widgetChannelId.orElse(null)
-suspend fun Guild.widgetChannel(): GuildChannel = widgetChannel.awaitSingle()
-fun Guild.systemChannelId(): Snowflake? = systemChannelId.orElse(null)
-suspend fun Guild.systemChannel(): TextChannel = systemChannel.awaitSingle()
-fun Guild.joinTime(): Instant? = joinTime.orElse(null)
-fun Guild.large(): Boolean? = isLarge.orElse(null)
-suspend fun Guild.voiceStates(): List<VoiceState> = voiceStates.collectList().awaitSingle()
-suspend fun Guild.members(): List<Member> = members.collectList().awaitSingle()
-suspend fun Guild.channels(): List<GuildChannel> = channels.collectList().awaitSingle()
-suspend fun Guild.presences(): List<Presence> = presences.collectList().awaitSingle()
-suspend fun Guild.eradicate(): Unit = delete().awaitSingle().let {}
-suspend fun Guild.bans(): List<Ban> = bans.collectList().awaitSingle()
-suspend fun Guild.exit(): Unit = leave().awaitSingle().let {}
-suspend fun Guild.auditLog(): List<AuditLogEntry> = auditLog.collectList().awaitSingle()
-suspend fun Guild.webhooks(): List<Webhook> = webhooks.collectList().awaitSingle()
-suspend fun Guild.invites(): List<ExtendedInvite> = invites.collectList().awaitSingle()
-                
+fun Guild.awaitIconUrl(format: Image.Format): String? = getIconUrl(format).grab()
+fun Guild.awaitSplashUrl(format: Image.Format): String? = getSplashUrl(format).grab()
+suspend fun Guild.owner(): User = owner.await()
+suspend fun Guild.region(): Region = region.await()
+suspend fun Guild.regions(): List<Region> = regions.await()
+fun Guild.afkChannelId(): Snowflake? = afkChannelId.grab()
+suspend fun Guild.afkChannel(): VoiceChannel? = afkChannel.awaitNull()
+fun Guild.embedChannelId(): Snowflake? = embedChannelId.grab()
+suspend fun Guild.embedChannel(): GuildChannel? = embedChannel.awaitNull()
+suspend fun Guild.roles(): List<Role> = roles.await()
+suspend fun Guild.awaitRole(id: Snowflake): Role = getRoleById(id).await()
+suspend fun Guild.awaitEveryoneRole(): Role = awaitRole(id)
+suspend fun Guild.awaitEmojis(): List<GuildEmoji> = emojis.await()
+suspend fun Guild.awaitEmoji(id: Snowflake): GuildEmoji = getGuildEmojiById(id).await()
+fun Guild.applicationId(): Snowflake? = applicationId.grab()
+fun Guild.widgetChannelId(): Snowflake? = widgetChannelId.grab()
+suspend fun Guild.widgetChannel(): GuildChannel = widgetChannel.await()
+fun Guild.systemChannelId(): Snowflake? = systemChannelId.grab()
+suspend fun Guild.systemChannel(): TextChannel? = systemChannel.await()
+fun Guild.joinTime(): Instant? = joinTime.grab()
+fun Guild.large(): Boolean? = isLarge.grab()
+fun Guild.memberCount(): Int? = memberCount.grab()
+suspend fun Guild.voiceStates(): List<VoiceState> = voiceStates.await()
+suspend fun Guild.members(): List<Member> = members.await()
+suspend fun Guild.awaitMember(id: Snowflake): Member = getMemberById(id).await()
+suspend fun Guild.channels(): List<GuildChannel> = channels.await()
+suspend fun Guild.awaitChannel(id: Snowflake): GuildChannel = getChannelById(id).await()
+suspend fun Guild.presences(): List<Presence> = presences.await()
+suspend fun Guild.update(spec: (GuildEditSpec) -> Unit): Guild = edit(spec).await()
+suspend fun Guild.newRole(spec: (RoleCreateSpec) -> Unit): Role = createRole(spec).await()
+suspend fun Guild.newCategory(spec: (CategoryCreateSpec) -> Unit): Category = createCategory(spec).await()
+suspend fun Guild.newTextChannel(spec: (TextChannelCreateSpec) -> Unit): TextChannel = createTextChannel(spec).await()
+suspend fun Guild.newVoiceChannel(spec: (VoiceChannelCreateSpec) -> Unit): VoiceChannel =
+    createVoiceChannel(spec).await()
+
+suspend fun Guild.awaitDelete(): Unit = delete().unit()
+suspend fun Guild.awaitKick(id: Snowflake, reason: String? = null): Unit = kick(id, reason).unit()
+suspend fun Guild.bans(): List<Ban> = bans.await()
+suspend fun Guild.awaitBan(id: Snowflake): Ban = getBan(id).await()
+suspend fun Guild.awaitBan(id: Snowflake, spec: (BanQuerySpec) -> Unit): Unit = ban(id, spec).unit()
+suspend fun Guild.awaitUnban(id: Snowflake, reason: String? = null): Unit = unban(id, reason).unit()
+suspend fun Guild.awaitPruneCount(days: Int): Int = getPruneCount(days).await()
+suspend fun Guild.awaitPrune(days: Int, reason: String? = null): Int = prune(days, reason).await()
+suspend fun Guild.awaitLeave(): Unit = leave().unit()
+suspend fun Guild.awaitAuditLog(spec: (AuditLogQuerySpec) -> Unit = {}): List<AuditLogEntry> = getAuditLog(spec).await()
+suspend fun Guild.webhooks(): List<Webhook> = webhooks.await()
+suspend fun Guild.invites(): List<ExtendedInvite> = invites.await()
+suspend fun Guild.editSelfNickname(nickname: String): String = changeSelfNickname(nickname).await()
